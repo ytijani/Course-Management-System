@@ -8,32 +8,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import * as z from "zod";
 import { CardWrapper } from "./card-wrapper";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { Button } from "@/components/ui/button";
-
-// Zod schema for validation
-const signUpSchema = z
-  .object({
-    username: z.string().min(2, { message: "Username must be at least 2 characters" }),
-    email: z.string().email({ message: "Email is required" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react"; 
+import { signUpSchema } from "@/schemas/index";
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const [successMessage, setSuccessMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState(""); 
+
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -44,8 +37,23 @@ const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signUpSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    try {
+      await axios.post("http://localhost:4000/auth/register", values);
+      setSuccessMessage("Successfully registered! Redirecting to sign-in...");
+      form.reset();
+
+      setTimeout(() => {
+        router.push("/sign-in");
+      }, 4000);
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data.message || "An error occurred");
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    }
   };
 
   const isLoading = form.formState.isSubmitting;
@@ -141,13 +149,9 @@ const SignUpForm = () => {
               )}
             />
           </div>
-          <FormError message="" />
-          <FormSuccess message="" />
-          <Button
-            disabled={isLoading}
-            type="submit"
-            className="w-full"
-          >
+          <FormError message={errorMessage} />
+          <FormSuccess message={successMessage} />
+          <Button disabled={isLoading} type="submit" className="w-full">
             Sign Up
           </Button>
         </form>

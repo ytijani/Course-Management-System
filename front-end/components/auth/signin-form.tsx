@@ -17,24 +17,40 @@ import {Input} from '@/components/ui/input'
 import { FormError } from "../form/form-error";
 import { FormSuccess } from "../form/form-success";
 import { Button } from "@/components/ui/button";
+import { loginSchema } from "@/schemas/index";
+import axios from "axios";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const loginSchema = z.object({
-    email: z.string().email({ message: "Email is required" }),
-    password: z.string().min(1, {message : "Password is required"})
-});
+
 
 const SignInForm = () => {
+  const [successMessage, setSuccessMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState(""); 
 
+  const router = useRouter()
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-          email: "",
+          username: "",
           password: "",
         },
     });
 
-    const onSubmit = (values: z.infer<typeof loginSchema>) => {
-        console.log(values)
+    const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+      try {
+        const res = await axios.post("http://localhost:4000/auth/login", values, {withCredentials: true,});
+        setSuccessMessage(res.data.message);
+        form.reset();
+        router.refresh()
+  
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setErrorMessage(error.response?.data.message || "An error occurred");
+        } else {
+          setErrorMessage("An unknown error occurred");
+        }
+      }
     };
 
 const isLoading = form.formState.isSubmitting
@@ -51,16 +67,16 @@ const isLoading = form.formState.isSubmitting
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
                       {...field}
-                      placeholder="john.dow@example.com"
-                      type="email"
+                      placeholder="john23"
+                      type="username"
                     />
                   </FormControl>
                   <FormMessage />
@@ -84,8 +100,8 @@ const isLoading = form.formState.isSubmitting
               )}
             />
           </div>
-          <FormError message="" />
-          <FormSuccess message=""/>
+          <FormError message={errorMessage}/>
+          <FormSuccess message={successMessage}/>
           <Button 
             disabled={isLoading}
             type="submit"
