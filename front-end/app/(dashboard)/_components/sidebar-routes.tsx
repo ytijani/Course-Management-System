@@ -13,6 +13,11 @@ const routesItems = [
         icon: Layout,
         label : "My Courses",
         href : '/mycourses'
+    },
+    {
+        icon: Layout,
+        label : "Browser",
+        href : '/search'
     }
 ]
 
