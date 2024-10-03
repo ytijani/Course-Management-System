@@ -1,13 +1,11 @@
-import { MobileSideBar } from "./mobile-sidebar"
-
+import { MobileSideBar } from "./mobile-sidebar";
 
 export const Navbar = () => {
     return (
-        <div className="p-4 border-b h-full flex items-center bg-white shadow-sm ">
-            <MobileSideBar/>
-            
+        <div className="p-4 h-full flex items-center justify-between">
+            <MobileSideBar />
         </div>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

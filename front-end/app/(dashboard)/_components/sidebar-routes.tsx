@@ -1,11 +1,11 @@
 'use client'
 
-import { Layout } from 'lucide-react'
+import { Layout, List } from 'lucide-react'
 import { SidebarItem } from './sidebar-items';
 
 const routesItems = [
     {
-        icon: Layout,
+        icon: List,
         label : "Courses",
         href : '/'
     },
