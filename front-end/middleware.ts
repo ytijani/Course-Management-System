@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token');
 
   // Define paths that don't require authentication
-  const publicPaths = ['/sign-in', '/sign-up'];
+  const publicPaths = ['/sign-in', '/sign-up', '/'];
 
   // Check if the user is trying to access a protected route
   if (!token && !publicPaths.includes(request.nextUrl.pathname)) {

@@ -9,7 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       useFactory: () => {
         const user = process.env.DATABASE_USER;
         const password = process.env.DATABASE_PASSWORD;
-        const host = process.env.DATABASE_HOST || 'localhost';
+        const host = process.env.DATABASE_HOST;
 
         return {
           uri: `mongodb://${user}:${password}@${host}`,
