@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Course } from './schema/course.schema';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Injectable()
 export class CoursesService {
@@ -20,5 +21,10 @@ export class CoursesService {
       this.courseModel.countDocuments().exec(),
     ]);
     return { courses, total };
+  }
+
+  async createCourse(createCourseDto: CreateCourseDto): Promise<Course> {
+    const createdCourse = new this.courseModel(createCourseDto);
+    return createdCourse.save();
   }
 }

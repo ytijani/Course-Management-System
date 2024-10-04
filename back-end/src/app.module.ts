@@ -8,12 +8,10 @@ import { CoursesModule } from './courses/courses.module';
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       useFactory: () => {
-        const user = process.env.DATABASE_USER;
-        const password = process.env.DATABASE_PASSWORD;
         const host = process.env.DATABASE_HOST;
-
+        const dbname = process.env.DATABASE_NAME;
         return {
-          uri: `mongodb://${user}:${password}@${host}`,
+          uri: `mongodb://${host}/${dbname}`,
         };
       },
     }),
