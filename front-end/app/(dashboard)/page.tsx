@@ -44,7 +44,7 @@ export default function Home() {
 
   return (
     <div className="p-4">
-      <div className="flex mb-4 items-center justify-between">
+      <div className="flex mb-4">
         <FilterTable
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

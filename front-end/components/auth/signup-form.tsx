@@ -45,7 +45,7 @@ const SignUpForm = () => {
 
       setTimeout(() => {
         router.push("/sign-in");
-      }, 4000);
+      }, 2000);
 
     } catch (error) {
       if (axios.isAxiosError(error)) {

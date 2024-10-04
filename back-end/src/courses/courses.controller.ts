@@ -7,16 +7,19 @@ import {
   HttpStatus,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { Course } from './schema/course.schema';
+import { JwtAuthGuard } from 'src/auth/strategies/jwt.guard';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getCourses(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
@@ -34,6 +37,7 @@ export class CoursesController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createCourse(
     @Body() createCourseDto: CreateCourseDto,
   ): Promise<Course> {

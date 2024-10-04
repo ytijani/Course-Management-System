@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
+
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface FilterTableProps {
@@ -25,14 +24,14 @@ export const FilterTable = ({
   const schedules = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-4 w-full">
       {/* Search by Title */}
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search by Course Title"
-        className="border p-2 rounded"
+        placeholder="course title ..."
+        className="border py-[8px] px-2 rounded text-[15px]"
       />
 
       {/* Filter by Instructor */}
@@ -40,8 +39,8 @@ export const FilterTable = ({
         type="text"
         value={instructorFilter}
         onChange={(e) => setInstructorFilter(e.target.value)}
-        placeholder="Search by Instructor"
-        className="border p-2 rounded"
+        placeholder="Search by Instructor ..."
+        className="border py-[8px] px-2 rounded text-[15px]"
       />
 
       {/* Schedule Filter */}

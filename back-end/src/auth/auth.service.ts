@@ -54,8 +54,14 @@ export class AuthService {
     user: User,
   ): Promise<{ access_token: string; refresh_token: string }> {
     const payload = { username: user.username, sub: user._id };
-    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refresh_token = this.jwtService.sign(payload, { expiresIn: '30d' });
+    const access_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: '15m',
+    });
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: '30d',
+    });
     return { access_token, refresh_token };
   }
 }
