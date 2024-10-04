@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  Res,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -42,12 +43,36 @@ export class AuthService {
     }
   }
 
+  async generateAccessToken(payload: any) {
+    return await this.jwtService.signAsync(payload, {
+      expiresIn: '30m',
+      secret: process.env.JWT_SECRET,
+    });
+  }
+
+  async isTokenValid(token: string, secretKey: string): Promise<any> {
+    try {
+      await this.jwtService.verifyAsync(token, { secret: secretKey });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  decodeToken(token: string): any {
+    return this.jwtService.decode(token);
+  }
+
   async validateUser(username: string, password: string): Promise<User> {
     const user = await this.userModel.findOne({ username });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
     return user;
+  }
+
+  removeCookie(@Res() response: any, cookieName: string, params: any) {
+    response.cookie(cookieName, '', params);
   }
 
   async login(

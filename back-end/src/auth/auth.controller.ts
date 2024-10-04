@@ -5,14 +5,62 @@ import {
   HttpException,
   HttpStatus,
   Res,
+  Req,
+  BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { User } from '../user/schemas/user.schema';
 import { Response } from 'express';
+import { User } from 'src/user/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('refresh')
+  async getNewAccessToken(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body('grant_type') grant: string | undefined,
+  ): Promise<void> {
+    const refreshToken = req.cookies['refresh_token'];
+
+    // Check if grant type is valid
+    if (!grant || grant !== 'refresh_token') {
+      throw new BadRequestException('Bad Grant Type');
+    }
+
+    // Verify the validity of the refresh token
+    if (
+      !(await this.authService.isTokenValid(
+        refreshToken,
+        process.env.JWT_SECRET,
+      ))
+    ) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    // Decode the payload from the refresh token
+    const payload = this.authService.decodeToken(refreshToken);
+    const { username, name } = payload;
+
+    // Generate a new access token
+    const newAccessToken = await this.authService.generateAccessToken({
+      username,
+      name,
+    });
+
+    // Set the new access token in a cookie
+    res.cookie('access_token', newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
+    // Respond with the new access token
+    res.status(201).json({ access_token: newAccessToken });
+  }
 
   @Post('register')
   async register(
@@ -44,14 +92,14 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 15 * 60 * 1000,
+        maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
       response.cookie('refresh_token', tokens.refresh_token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       });
 
       response.send({ message: 'Logged in successfully' });

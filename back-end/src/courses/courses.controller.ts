@@ -12,7 +12,7 @@ import {
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { Course } from './schema/course.schema';
-import { JwtAuthGuard } from 'src/auth/strategies/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('courses')
 export class CoursesController {
