@@ -11,14 +11,9 @@ const routesItems = [
     },
     {
         icon: Layout,
-        label : "My Courses",
-        href : '/mycourses'
+        label : "Add Course",
+        href : '/addcourse'
     },
-    {
-        icon: Layout,
-        label : "Browser",
-        href : '/search'
-    }
 ]
 
 export const SidebarRoutes = () => {

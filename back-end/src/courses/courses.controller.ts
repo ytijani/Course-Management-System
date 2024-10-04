@@ -1,7 +1,16 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
-// import { Course } from './schema/course.schema';
-// import { CreateCourseDto } from './dto/create-course.dto';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { Course } from './schema/course.schema';
 
 @Controller('courses')
 export class CoursesController {
@@ -24,10 +33,20 @@ export class CoursesController {
     );
   }
 
-  // @Post()
-  // async createCourse(
-  //   @Body() createCourseDto: CreateCourseDto,
-  // ): Promise<Course> {
-  //   return this.coursesService.createCourse(createCourseDto);
-  // }
+  @Post()
+  async createCourse(
+    @Body() createCourseDto: CreateCourseDto,
+  ): Promise<Course> {
+    try {
+      return await this.coursesService.createCourse(createCourseDto);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw new HttpException(error.message, HttpStatus.CONFLICT);
+      }
+      throw new HttpException(
+        'An error occurred while creating the course',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

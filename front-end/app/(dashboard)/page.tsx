@@ -34,7 +34,7 @@ export default function Home() {
         setCourses(response.data.courses);
         setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.error("Error fetching courses:", error); // Log the error
+        console.error("Error fetching courses:", error);
         setError("Failed to fetch courses.");
       }
     };
