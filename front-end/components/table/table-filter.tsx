@@ -1,36 +1,48 @@
-// FilterTable.tsx
-"use client"; // 
+"use client";
 
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"; // Import shadcn Select components
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface FilterTableProps {
-  instructorFilter: string;
-  setInstructorFilter: (instructor: string) => void;
-  scheduleFilter: string;
-  setScheduleFilter: (schedule: string) => void;
+  searchTerm: string; // Search term for course title
+  setSearchTerm: (term: string) => void; // Setter for search term
+  instructorFilter: string; // Instructor filter
+  setInstructorFilter: (instructor: string) => void; // Setter for instructor filter
+  scheduleFilter: string; // Schedule filter
+  setScheduleFilter: (schedule: string) => void; // Setter for schedule filter
 }
 
 export const FilterTable = ({
+  searchTerm,
+  setSearchTerm,
   instructorFilter,
   setInstructorFilter,
   scheduleFilter,
   setScheduleFilter,
 }: FilterTableProps) => {
+
+  const schedules = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
   return (
     <div className="flex space-x-4">
-      {/* Instructor Filter */}
-      <Select value={instructorFilter} onValueChange={setInstructorFilter}>
-        <SelectTrigger className="border p-2 rounded">
-          <SelectValue placeholder="Filter by Instructor" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="Beth Williamson">Beth Williamson</SelectItem>
-          <SelectItem value="Hannah Ward">Hannah Ward</SelectItem>
-          <SelectItem value="Regina Ford">Regina Ford</SelectItem>
-          <SelectItem value="Michael Meyers Jr.">Michael Meyers Jr.</SelectItem>
-          <SelectItem value="Kimberly Hatfield">Kimberly Hatfield</SelectItem>
-        </SelectContent>
-      </Select>
+      {/* Search by Title */}
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search by Course Title"
+        className="border p-2 rounded"
+      />
+
+      {/* Filter by Instructor */}
+      <input
+        type="text"
+        value={instructorFilter}
+        onChange={(e) => setInstructorFilter(e.target.value)}
+        placeholder="Search by Instructor"
+        className="border p-2 rounded"
+      />
 
       {/* Schedule Filter */}
       <Select value={scheduleFilter} onValueChange={setScheduleFilter}>
@@ -38,10 +50,11 @@ export const FilterTable = ({
           <SelectValue placeholder="Filter by Schedule" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Monday">Monday</SelectItem>
-          <SelectItem value="Tuesday">Tuesday</SelectItem>
-          <SelectItem value="Wednesday">Wednesday</SelectItem>
-          <SelectItem value="Thursday">Thursday</SelectItem>
+          {schedules.map((schedule) => (
+            <SelectItem key={schedule} value={schedule}>
+              {schedule}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
