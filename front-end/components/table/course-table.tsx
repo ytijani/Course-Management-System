@@ -21,6 +21,13 @@ interface CourseTableProps {
   }[];
 }
 
+interface Course {
+  title: string;
+  description: string;
+  instructor: string;
+  schedule: string;
+}
+
 export const CourseTable: React.FC<CourseTableProps> = ({ currentItems }) => {
   const [selectedCourse, setSelectedCourse] = useState<null | {
     title: string;
@@ -30,7 +37,7 @@ export const CourseTable: React.FC<CourseTableProps> = ({ currentItems }) => {
   }>(null); 
   const [isPopupOpen, setIsPopupOpen] = useState(false); 
 
-  const handleRowClick = (course) => {
+  const handleRowClick = (course : Course) => {
     setSelectedCourse(course); 
     setIsPopupOpen(true); 
   };
