@@ -22,7 +22,7 @@ export const FilterTable = ({
   const schedules = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
   return (
-    <div className="flex items-center gap-4 w-full">
+    <div className="flex items-center gap-4  flex-wrap md:flex-nowrap">
       {/* Search by Title */}
       <div className="w-full md:w-1/3">
         <input

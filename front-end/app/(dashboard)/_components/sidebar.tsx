@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SidebarRoutes } from "./sidebar-routes";
+import { Logout } from "@/components/auth/logout";
 
 export const SideBar = () => {
   return (
@@ -16,6 +17,9 @@ export const SideBar = () => {
       </div>
       <div className="flex flex-col w-full">
         <SidebarRoutes />
+      </div>
+      <div className="mt-auto flex flex-col  w-full">
+        <Logout/>
       </div>
     </div>
   );

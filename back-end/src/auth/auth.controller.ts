@@ -8,6 +8,7 @@ import {
   Req,
   BadRequestException,
   UnauthorizedException,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
@@ -70,6 +71,22 @@ export class AuthController {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  @Delete('logout')
+  async logout(@Res() res: Response): Promise<void> {
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+    res.clearCookie('refresh_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    res.status(200).json({ message: 'Logged out successfully' });
   }
 
   @Post('login')
