@@ -13,13 +13,12 @@ const AddCourse = () => {
   const [instructor, setInstructor] = useState("");
   const [schedule, setSchedule] = useState("");
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
+  const [successMessage, setSuccessMessage] = useState(""); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccessMessage(""); // Reset success message on new submission
-
+    setSuccessMessage(""); 
     try {
       const response = await apiClient.post("/courses", {
         title,
@@ -28,7 +27,7 @@ const AddCourse = () => {
         schedule,
       });
       console.log("Course created:", response.data);
-      setSuccessMessage("Course created successfully!"); // Set success message
+      setSuccessMessage("Course created successfully!"); 
     } catch (err) {
       setError("Failed to create course. Please try again.");
       console.error(err);
@@ -39,7 +38,7 @@ const AddCourse = () => {
     <div className="p-4">
       <h1 className="text-lg font-semibold mb-4">Create Course</h1>
       {error && <p className="text-red-500">{error}</p>}
-      {successMessage && <p className="text-green-500">{successMessage}</p>} {/* Display success message */}
+      {successMessage && <p className="text-green-500">{successMessage}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label htmlFor="title">Title</Label>

@@ -18,14 +18,13 @@ import { FormSuccess } from "../form/form-success";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; 
+import { useState } from "react";
 import { signUpSchema } from "@/schemas/index";
 
 const SignUpForm = () => {
   const router = useRouter();
-  const [successMessage, setSuccessMessage] = useState(""); 
-  const [errorMessage, setErrorMessage] = useState(""); 
-
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -46,7 +45,6 @@ const SignUpForm = () => {
       setTimeout(() => {
         router.push("/sign-in");
       }, 2000);
-
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrorMessage(error.response?.data.message || "An error occurred");
@@ -151,7 +149,11 @@ const SignUpForm = () => {
           </div>
           <FormError message={errorMessage} />
           <FormSuccess message={successMessage} />
-          <Button disabled={isLoading} type="submit" className="w-full">
+          <Button
+            disabled={isLoading}
+            type="submit"
+            className="w-full bg-sky-600 text-white hover:bg-sky-700 transition duration-200 "
+          >
             Sign Up
           </Button>
         </form>

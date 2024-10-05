@@ -105,7 +105,7 @@ const isLoading = form.formState.isSubmitting
           <Button 
             disabled={isLoading}
             type="submit"
-            className="w-full">
+            className="w-full bg-sky-600 text-white hover:bg-sky-700 transition duration-200 ">
             Sign In
           </Button>
         </form>
