@@ -10,7 +10,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { User } from 'src/user/schemas/user.schema';
 
 @Controller('auth')
@@ -25,12 +25,10 @@ export class AuthController {
   ): Promise<void> {
     const refreshToken = req.cookies['refresh_token'];
 
-    // Check if grant type is valid
     if (!grant || grant !== 'refresh_token') {
       throw new BadRequestException('Bad Grant Type');
     }
 
-    // Verify the validity of the refresh token
     if (
       !(await this.authService.isTokenValid(
         refreshToken,
@@ -40,17 +38,14 @@ export class AuthController {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // Decode the payload from the refresh token
     const payload = this.authService.decodeToken(refreshToken);
     const { username, name } = payload;
 
-    // Generate a new access token
     const newAccessToken = await this.authService.generateAccessToken({
       username,
       name,
     });
 
-    // Set the new access token in a cookie
     res.cookie('access_token', newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -58,7 +53,6 @@ export class AuthController {
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
-    // Respond with the new access token
     res.status(201).json({ access_token: newAccessToken });
   }
 

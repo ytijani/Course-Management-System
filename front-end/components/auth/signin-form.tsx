@@ -43,7 +43,7 @@ const SignInForm = () => {
         setSuccessMessage(res.data.message);
         form.reset();
         router.refresh()
-  
+        router.push("/")
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setErrorMessage(error.response?.data.message || "An error occurred");

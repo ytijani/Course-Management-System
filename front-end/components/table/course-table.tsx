@@ -1,8 +1,6 @@
-// CourseTable.tsx
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -20,26 +18,44 @@ interface CourseTableProps {
 
 export const CourseTable: React.FC<CourseTableProps> = ({ currentItems }) => {
   return (
-    <Table>
-      <TableCaption>A list of courses.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Title</TableHead>
-          <TableHead>Instructor</TableHead>
-          <TableHead>Schedule</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentItems.map((item) => (
-          <TableRow key={item.id} className="cursor-pointer">
-            <TableCell className="font-medium py-3">{item.id}</TableCell>
-            <TableCell>{item.title}</TableCell>
-            <TableCell>{item.instructor}</TableCell>
-            <TableCell>{item.schedule}</TableCell>
+    <div className="overflow-x-auto">
+      <Table className="w-full min-w-[600px] border-separate border-spacing-y-3">
+        <TableHeader>
+          <TableRow className="bg-gray-100 text-left">
+            <TableHead className="px-4">ID</TableHead>
+            <TableHead className="px-4">Title</TableHead>
+            <TableHead className="px-4 hidden md:table-cell">
+              Instructor
+            </TableHead>
+            <TableHead className="px-4">Schedule</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {currentItems.length > 0 ? (
+            currentItems.map((item, index) => (
+              <TableRow
+                key={item.id}
+                className="bg-white  cursor-pointer rounded-lg shadow-sm hover:bg-none"
+              >
+                <TableCell className="font-medium py-2 px-4">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="py-2 px-4">{item.title}</TableCell>
+                <TableCell className="py-2 px-4 hidden md:table-cell">
+                  {item.instructor}
+                </TableCell>
+                <TableCell className="py-2 px-4">{item.schedule}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                No courses found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 };

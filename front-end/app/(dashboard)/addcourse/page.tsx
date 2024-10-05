@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import apiClient from "@/lib/api";
 
 const AddCourse = () => {
   const [title, setTitle] = useState("");
@@ -19,7 +19,7 @@ const AddCourse = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:4000/courses", {
+      const response = await apiClient.post("/courses", {
         title,
         description,
         instructor,
@@ -80,7 +80,7 @@ const AddCourse = () => {
             required
           />
         </div>
-        <Button type="submit">Create Course</Button>
+        <Button className="w-full bg-sky-600 text-white hover:bg-sky-700 transition duration-200 py-2 rounded-md mt-4" type="submit">Create Course</Button>
       </form>
     </div>
   );
